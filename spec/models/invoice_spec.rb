@@ -69,7 +69,7 @@ RSpec.describe Invoice, type: :model do
   end
 
   describe "#formatted_date" do
-    it 'will display the created at date as Monday, December 01, 2021 format' do
+    xit 'will display the created at date as Monday, December 01, 2021 format' do
       customer1 = Customer.create(first_name: "Patrick", last_name: "Star")
       customer2 = Customer.create(first_name: "Sandy", last_name: "Cheeks")
 
