@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   resources :merchants, except: [:destroy, :index, :show, :edit, :update, :new, :create] do
     resources :items, except: [:destroy], controller: 'merchants/items'
     resources :invoices, except: [:destroy, :new, :create], controller: 'merchants/invoices'
+    resources :bulk_discounts, module: :merchants, only: [:destroy, :index, :show, :edit, :update, :new, :create] 
 
     get "/dashboard", to: "merchants#show"
   end
+
 end
