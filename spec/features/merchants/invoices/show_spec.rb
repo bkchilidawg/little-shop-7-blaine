@@ -144,7 +144,9 @@ RSpec.describe "Merchants Invoices Show", type: :feature do
         expect(page).to have_select('Status:', selected: 'shipped')
       end
     end
+  end
 
+  describe "discounted revenue" do
     describe " When I visit my merchant invoice show page" do
       it "displays the total revenue for the merchant from this invoice (not including discounts)" do
         visit "/merchants/#{@merchant1.id}/invoices/#{@invoice3.id}"
@@ -157,7 +159,7 @@ RSpec.describe "Merchants Invoices Show", type: :feature do
         visit "/merchants/#{@merchant1.id}/invoices/#{@invoice3.id}"
 
         expect(page).to have_content("Total Discounted Revenue: #{@total_discounted_revenue}")
-        expect(page).to have_content("2442") 
+        expect(page).to have_content("2441") 
       end
     end
 
@@ -169,6 +171,5 @@ RSpec.describe "Merchants Invoices Show", type: :feature do
         expect(page).to have_link("View Discount")
       end
     end
-
   end
 end

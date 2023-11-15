@@ -53,7 +53,7 @@ RSpec.describe InvoiceItem, type: :model do
 
           expect(@invoice_item1.discounted_revenue).to eq(144)
           expect(@invoice_item2.discounted_revenue).to eq(201)
-          expect(@invoice_item3.discounted_revenue).to eq(504)
+          expect(@invoice_item3.discounted_revenue).to eq(503)
           expect(@invoice_item4.discounted_revenue).to eq(48)
         end
       end

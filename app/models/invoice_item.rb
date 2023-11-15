@@ -9,9 +9,10 @@ enum status: { packaged: 0, pending: 1, shipped: 2 }
   end
 
   def applied_discount
-    if quantity && unit_price
-      item.merchant.bulk_discounts.where("quantity_threshold <= ?", quantity).order(percentage_discount: :desc).first
-    end
+      item.merchant.bulk_discounts
+        .where("quantity_threshold <= ?", quantity)
+        .order(percentage_discount: :desc)
+        .first
   end
 
   def discounted_revenue
@@ -19,8 +20,10 @@ enum status: { packaged: 0, pending: 1, shipped: 2 }
       if applied_discount.nil?
         quantity * unit_price
       else
-        ((100 - applied_discount.percentage_discount).to_f/100 * quantity * unit_price).to_i
+        discounted_price = unit_price * (1 - applied_discount.percentage_discount / 100.0)
+        (quantity * discounted_price).to_i
       end
     end
   end
+  
 end

@@ -9,19 +9,25 @@ class Merchants::BulkDiscountsController < ApplicationController
   end
 
   def show
-    @bulk_discount = @merchant.bulk_discounts.find(params[:id])
+    @bulk_discount = BulkDiscount.find(params[:id])
   end
 
   def edit
-    @bulk_discount = @merchant.bulk_discounts.find(params[:id])
+    @bulk_discount = BulkDiscount.find(params[:id])
   end
 
   def update
-    @bulk_discount = BulkDiscount.find(params[:id])
-    if @bulk_discount.update(bulk_discount_params)
-      redirect_to merchant_bulk_discount_path(@merchant, @bulk_discount)
+    if @bulk_discount.has_pending_invoice_items?
+      redirect_to "/merchants/#{params[:merchant_id]}/bulk_discounts/#{params[:id]}"
     else
-      render :edit
+      if @bulk_discount.update(
+        quantity_threshold: params[:bulk_discount][:quantity_threshold],
+        percentage_discount: params[:bulk_discount][:percentage_discount]
+      )
+        redirect_to "/merchants/#{params[:merchant_id]}/bulk_discounts/#{params[:id]}"
+      else
+        render :edit
+      end
     end
   end
 
@@ -37,8 +43,12 @@ class Merchants::BulkDiscountsController < ApplicationController
   end
 
   def destroy
-     @merchant.bulk_discounts.find(params[:id]).destroy
-      redirect_to merchant_bulk_discounts_path(@merchant)
+    if @bulk_discount.has_pending_invoice_items?
+      redirect_to "/merchants/#{params[:merchant_id]}/bulk_discounts"
+    else
+      BulkDiscount.destroy(params[:id])
+      redirect_to "/merchants/#{params[:merchant_id]}/bulk_discounts"
+    end
   end
 
   private
