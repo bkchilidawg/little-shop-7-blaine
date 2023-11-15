@@ -13,6 +13,8 @@
 # Customer.destroy_all
 # Merchant.destroy_all
 
-@bulk_discount1 = @merchant1.bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 15)
-  @bulk_discount2 = @merchant1.bulk_discounts.create!(quantity_threshold: 20, percentage_discount: 20)
+
 Rake::Task['csv_load:all'].invoke
+
+@bulk_discount1 = Merchant.find(1).bulk_discounts.create!(quantity_threshold: 5, percentage_discount: 10)
+@bulk_discount2 = Merchant.find(1).bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 20)
