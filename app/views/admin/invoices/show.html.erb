@@ -1,8 +1,9 @@
-<h1> Admin Invoice Show Page</h1>
+<h1>Admin Invoice Page</h1>
 <p><b>Invoice ID: </b><%= @invoice.id %></p>
 <p><b>Created At:</b> <%= @invoice.formatted_date %></p>
 <p><b>Customer Name:</b> <%= @invoice.customer_name %></p>
 <p><b>Total Revenue: </b><%= @invoice.total_revenue %></p>
+<p><b>Total Discounted Revenue: </b><%= @invoice.discounted_revenue %></p>
 
 <%= form_for @invoice, url: "/admin/invoices/#{@invoice.id}", method: :patch do |f| %>
   <b><%= f.label :status, "Invoice Status:" %></b>
@@ -13,8 +14,20 @@
 <h3> <b>Items</b> </h3>
 
 <% @invoice.invoice_items.each do |invoice_item| %>
-  <p>Name: <%= invoice_item.item.name %></p>
-  <p>Quantity Ordered: <%= invoice_item.quantity%>
-  <p>Price: <%= invoice_item.unit_price %></p>
-  <p>Status: <%= invoice_item.status %>
+  <div id="admin-invoiceitem<%= invoice_item.id %>">
+    <p><b>Name:</b> <%= invoice_item.item_name %></p>
+    <p><b>Quantity Ordered:</b> <%= invoice_item.quantity %></p>
+    <p><b>Price:</b> <%= invoice_item.unit_price %></p>
+    <p><b>Status:</b> <%= invoice_item.status %></p>
+
+    
+    <% if invoice_item.applied_discount.present? %>
+      <p><b>Applied Bulk Discount:</b> <%= link_to 'View Discount', admin_bulk_discount_path(invoice_item.applied_discount) %></p>
+    <% end %>
+
+    <%= form_for invoice_item, url: "/admin/invoices/#{@invoice.id}/items/#{invoice_item.id}", method: :patch do |f| %>      <b><%= f.label :status, "Status:" %></b>
+      <%= f.select :status, options_for_select(['packaged', 'pending', 'shipped'], selected: invoice_item.status) %>
+      <%= f.submit 'Update Item Status' %>
+    <% end %>
+  </div>
 <% end %>

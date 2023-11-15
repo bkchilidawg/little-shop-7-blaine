@@ -3,6 +3,7 @@
 <p><b>Created At:</b> <%= @invoice.created_at.strftime("%A, %B %d, %Y") %></p>
 <p><b>Customer Name:</b> <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
 <p><b>Total Revenue: </b><%= @invoice.total_revenue %></p>
+<p><b>Total Discounted Revenue: </b><%= @invoice.discounted_revenue %></p>
 
 <section id="invoice-items">
   <ul>
@@ -13,6 +14,10 @@
         <p><b>Name:</b> <%= invoice_item.item.name %></p>
         <p><b>Quantity Ordered:</b> <%= invoice_item.quantity%>
         <p><b>Price:</b> <%= invoice_item.item.unit_price %></p>
+
+        <% if invoice_item.applied_discount.present? %>
+          <p><b>Applied Bulk Discount:</b> <%= link_to 'View Discount', merchant_bulk_discount_path(@merchant, invoice_item.applied_discount) %></p>
+        <% end %>
 
         <%= form_for invoice_item, url: "/merchants/#{@merchant.id}/invoices/#{invoice_item.id}", method: :patch do |f| %>
           <b><%= f.label :status, "Status:" %></b>

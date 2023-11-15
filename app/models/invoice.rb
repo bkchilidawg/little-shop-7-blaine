@@ -15,6 +15,10 @@ class Invoice < ApplicationRecord
     invoice_items.sum('unit_price * quantity')
   end
 
+  def discounted_revenue
+    invoice_items.sum { |invoice_item| invoice_item.discounted_revenue.to_i }
+  end
+
   def customer_name
     "#{customer.first_name} #{customer.last_name}"
   end

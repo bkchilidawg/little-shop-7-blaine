@@ -30,7 +30,6 @@ RSpec.describe 'Merchant Bulk Discount Edit' do
       end
 
       it 'pre-populates the form with the discount attributes' do
-save_and_open_page
         expect(find_field('bulk_discount[percentage_discount]').value).to eq(@discount1.percentage_discount.to_s)
 
         expect(find_field('bulk_discount[quantity_threshold]').value).to eq(@discount1.quantity_threshold.to_s)
