@@ -47,7 +47,12 @@
 - Blaine Kennedy [Github](https://github.com/bkchilidawg) || [LinkedIn](https://www.linkedin.com/in/blaine-kennedy/)
 - Michael Kuhlmeier [Github](https://github.com/mbkuhl) || [LinkedIn](https://www.linkedin.com/in/michaelkuhlmeier/)
 - Cory Powell - [Github](https://github.com/coryrpow) || [LinkedIn](https://www.linkedin.com/in/coryrpow/)
+## Contributors for this project:
+- Blaine Kennedy [Github](https://github.com/bkchilidawg) || [LinkedIn](https://www.linkedin.com/in/blaine-kennedy/)
+
+## Repo:
+- https://github.com/bkchilidawg/little-shop-7-blaine
 
 ## Additional Documentation:
 
-- [Deployment Site(admin)](https://little-shop-7-44j1.onrender.com/admin)
+- [Deployment Site(admin)](https://little-shop-7-44j1.onrender.com/merchants/1/dashboard)
