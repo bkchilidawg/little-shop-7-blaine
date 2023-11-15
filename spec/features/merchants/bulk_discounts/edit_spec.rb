@@ -54,6 +54,21 @@ RSpec.describe 'Merchant Bulk Discount Edit' do
           expect(page).to have_content('10')
         end
       end
+
+      
+      describe 'with invalid parameters' do
+        it 'does not update the bulk discount' do
+
+          fill_in 'bulk_discount[percentage_discount]', with: -20
+          fill_in 'bulk_discount[quantity_threshold]', with: -10
+
+          click_button 'Update Bulk Discount'
+          
+save_and_open_page
+          expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
+          expect(page).not_to have_content(-10)
+        end
+      end
     end
   end
 end

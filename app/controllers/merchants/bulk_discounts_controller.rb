@@ -16,14 +16,12 @@ class Merchants::BulkDiscountsController < ApplicationController
     @bulk_discount = @merchant.bulk_discounts.find(params[:id])
   end
 
-  def update 
-    @bulk_discount = @merchant.bulk_discounts.find(params[:id])
-    unless @bulk_discount.has_pending_invoice_items?
-      @bulk_discount.update!(
-        quantity_threshold: params[:bulk_discount][:quantity_threshold],
-        percentage_discount: params[:bulk_discount][:percentage_discount]
-      )
-      redirect_to "/merchants/#{params[:merchant_id]}/bulk_discounts/#{params[:id]}"
+  def update
+    @bulk_discount = BulkDiscount.find(params[:id])
+    if @bulk_discount.update(bulk_discount_params)
+      redirect_to merchant_bulk_discount_path(@merchant, @bulk_discount)
+    else
+      render :edit
     end
   end
 
