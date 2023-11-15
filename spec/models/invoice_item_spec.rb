@@ -22,8 +22,13 @@ RSpec.describe InvoiceItem, type: :model do
     @invoice3 = Invoice.create!(status: 1, customer_id: @customer3.id)
 
     @invoice_item1 = InvoiceItem.create!(quantity: 4, unit_price: 40, status: 1, invoice_id: @invoice1.id, item_id: @item1.id)
-    @invoice_item2 = InvoiceItem.create!(quantity: 4, unit_price: 36, status: 1, invoice_id: @invoice2.id, item_id: @item2.id)
-    @invoice_item3 = InvoiceItem.create!(quantity: 4, unit_price: 48, status: 1, invoice_id: @invoice3.id, item_id: @item3.id)
+    @invoice_item2 = InvoiceItem.create!(quantity: 7, unit_price: 36, status: 1, invoice_id: @invoice2.id, item_id: @item2.id)
+    @invoice_item3 = InvoiceItem.create!(quantity: 15, unit_price: 48, status: 1, invoice_id: @invoice3.id, item_id: @item3.id)
+    @invoice_item4 = InvoiceItem.create!(quantity: 1, unit_price: 48, status: 1, invoice_id: @invoice3.id, item_id: @item3.id)
+
+    @bulk_discount1 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 3, merchant_id: @merchant1.id)
+    @bulk_discount2 = BulkDiscount.create!(percentage_discount: 20, quantity_threshold: 5, merchant_id: @merchant1.id)
+    @bulk_discount3 = BulkDiscount.create!(percentage_discount: 30, quantity_threshold: 10, merchant_id: @merchant1.id)
   end
 
   describe "#instance_methods" do
@@ -32,5 +37,25 @@ RSpec.describe InvoiceItem, type: :model do
         expect(@invoice_item1.item_name).to eq("Krabby Patty")
       end
     end  
+
+    describe "applied_discount" do
+      it "returns the highest percentage discount that applies to the quantity of the item" do
+        
+        expect(@invoice_item1.applied_discount).to eq(@bulk_discount1)
+        expect(@invoice_item2.applied_discount).to eq(@bulk_discount2)
+        expect(@invoice_item3.applied_discount).to eq(@bulk_discount3)
+        expect(@invoice_item4.applied_discount).to eq(nil)
+      end
+    end
+
+    describe "discounted_revenue" do
+        it "calculates the discounted revenue for the invoice item" do
+
+          expect(@invoice_item1.discounted_revenue).to eq(144)
+          expect(@invoice_item2.discounted_revenue).to eq(201)
+          expect(@invoice_item3.discounted_revenue).to eq(504)
+          expect(@invoice_item4.discounted_revenue).to eq(48)
+        end
+      end
   end
 end

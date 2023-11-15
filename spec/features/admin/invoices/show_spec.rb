@@ -26,10 +26,13 @@ RSpec.describe "Admins Invoices Show", type: :feature do
     @invoiceitem1 = InvoiceItem.create(quantity: 3, unit_price: 999, status: 1, invoice_id: @invoice1.id, item_id: @item1.id)
     @invoiceitem2 = InvoiceItem.create(quantity: 2, unit_price: 555, status: 1, invoice_id: @invoice2.id, item_id: @item2.id)
     @invoiceitem3 = InvoiceItem.create(quantity: 1, unit_price: 333, status: 1, invoice_id: @invoice1.id, item_id: @item3.id)
-    @invoiceitem4 = InvoiceItem.create(quantity: 4, unit_price: 111, status: 1, invoice_id: @invoice3.id, item_id: @item4.id)
+    @invoiceitem4 = InvoiceItem.create(quantity: 20, unit_price: 111, status: 1, invoice_id: @invoice3.id, item_id: @item4.id)
     @invoiceitem5 = InvoiceItem.create(quantity: 2, unit_price: 444, status: 1, invoice_id: @invoice3.id, item_id: @item5.id)
     @invoiceitem6 = InvoiceItem.create(quantity: 3, unit_price: 888, status: 1, invoice_id: @invoice4.id, item_id: @item6.id)
     @invoiceitem7 = InvoiceItem.create(quantity: 5, unit_price: 222, status: 1, invoice_id: @invoice4.id, item_id: @item7.id)
+
+    @bulk_discount1 = @merchant1.bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 20)
+    @bulk_discount2 = @merchant1.bulk_discounts.create!(quantity_threshold: 20, percentage_discount: 30)
     
   end
 
@@ -87,7 +90,7 @@ RSpec.describe "Admins Invoices Show", type: :feature do
       visit "/admin/invoices/#{@invoice3.id}"
 
       expect(page).to have_content("Total Revenue: #{@total_revenue}")
-      expect(page).to have_content("1332")
+      expect(page).to have_content("3108")
 
       visit "/admin/invoices/#{@invoice4.id}"
 
@@ -155,4 +158,19 @@ RSpec.describe "Admins Invoices Show", type: :feature do
       expect(page).to have_select('Invoice Status:', selected: 'in progress')
     end
   end
+
+  describe "When I visit an admin invoice show page" do
+    it "Then I see the total revenue from this invoice (not including discounts)" do
+      visit "/admin/invoices/#{@invoice1.id}"
+
+      expect(page).to have_content("Total Revenue: 3330")
+    end
+
+    it "And I see the total discounted revenue from this invoice which includes bulk discounts in the calculation" do
+      visit "/admin/invoices/#{@invoice3.id}"
+      
+      expect(page).to have_content("Total Discounted Revenue: 3108")
+    end
+  end
+  
 end
