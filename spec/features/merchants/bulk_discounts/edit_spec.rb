@@ -71,6 +71,9 @@ RSpec.describe 'Merchant Bulk Discount Edit' do
           
           expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
           expect(page).not_to have_content(-10)
+          expect(page).not_to have_content(-20)
+          expect(page).to have_content(10)
+          expect(page).to have_content(20)
         end
       end
       describe 'when I click the edit link, but has a pending invoice' do
@@ -88,7 +91,6 @@ RSpec.describe 'Merchant Bulk Discount Edit' do
           expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount1))
           expect(page).to have_content('20')
           expect(page).to have_content('10')
-
         end
       end
     end
