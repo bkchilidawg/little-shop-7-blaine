@@ -31,7 +31,7 @@ RSpec.describe 'Merchant Bulk Discount Delete' do
       end
 
       it 'no longer displays the deleted discount' do
-        save_and_open_page
+        
         expect(page).to_not have_content(@bulk_discount2.percentage_discount)
         expect(page).to_not have_content(@bulk_discount2.quantity_threshold)
       end
